@@ -1,0 +1,25 @@
+services:
+  acm:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: acm-website
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/app/acm-cms-backend
+      - ../acm-website:/app/acm-website
+      - ../acm-cms-frontend:/app/acm-cms-frontend
+      - ../acm-backup:/app/acm-backup
+      # 用具名 volume 遮蔽掉 host 的 node_modules。
+      # 開發機是 Windows，host 上的套件含 Windows 原生檔案，
+      # 直接被容器內的 Linux Node 讀到會壞掉。
+      - website_node_modules:/app/acm-website/node_modules
+      - cms_node_modules:/app/acm-cms-frontend/node_modules
+
+volumes:
+  website_node_modules:
+  cms_node_modules:
