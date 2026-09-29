@@ -100,6 +100,7 @@ const showcaseItems = allShowcase.map(s => ({
   // - scrollRestoration 設為 manual 並捲回頂端：currentIndex 從 0 開始算，若瀏覽器把位置還原到中間，
   //   索引與畫面會對不上，下一次滾輪會跳到錯的 section。
   // - 方向鍵換頁聽的是 window 的 keydown。useEscapeKey 刻意不 stopPropagation，就是為了不擋到這裡。
+  //   keydown 也要對 ↑↓ 呼叫 preventDefault，理由同 wheel：原生捲動會打斷換頁的平滑捲動（例外見該段註解）。
   //
   // 改了會壞掉什麼：首頁的滾輪與方向鍵換頁、導覽圓點的狀態、首頁 modal 內的捲動。
   // 每個 section 的高度由下方 <style> 的 .section（height: 100vh）決定，改動高度也會讓換頁的停靠位置錯開。
@@ -159,6 +160,18 @@ const showcaseItems = allShowcase.map(s => ({
   }, { passive: false });
 
   window.addEventListener('keydown', (e) => {
+    // 擋掉方向鍵原生的 40px 捲動：它會打斷 goToSection 的平滑捲動，畫面停在半途而 currentIndex 已經加 1，
+    // 下一次滾輪就會跳過一頁。要放在 isScrolling 檢查之前，冷卻期間按方向鍵也會打斷滾輪觸發的捲動。
+    // modal 開著時（body 已鎖捲動）與焦點在輸入框時不擋，維持原本的行為：前者讓方向鍵能捲 modal 內容，後者讓游標能移動。
+    const target = e.target;
+    if (
+      (e.key === 'ArrowDown' || e.key === 'ArrowUp') &&
+      !document.querySelector('.modal') &&
+      !(target instanceof Element && target.closest('input, textarea, select, [contenteditable]'))
+    ) {
+      e.preventDefault();
+    }
+
     if (isScrolling) return;
     if (e.key === 'ArrowDown') goToSection(currentIndex + 1);
     if (e.key === 'ArrowUp') goToSection(currentIndex - 1);
