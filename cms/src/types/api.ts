@@ -1,4 +1,4 @@
-// 後端 API 的資料型別，依 acm-cms-backend/models.py 定義。
+// 後端 API 的資料型別，依 backend/models.py 定義。
 // Optional 欄位在回應中一定存在，沒填時是 null；送出時可以省略。
 
 export interface Link {

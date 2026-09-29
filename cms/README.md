@@ -6,22 +6,22 @@ ACM 官網內容管理系統（CMS）的前端介面，使用 React 與 TypeScri
 
 | 文件 | 內容 |
 |---|---|
-| [INSTALL.md](INSTALL.md) | 伺服器安裝與部署步驟、日常維運、常見問題 |
+| [INSTALL.md](../INSTALL.md) | 伺服器安裝與部署步驟、日常維運、常見問題 |
 | 維護文件 | [React 維護指南（HackMD）](https://hackmd.io/@HcF5PSZWQxW-PSzM1BqJYw/BJxnJPpKze) |
 | 本文件 | 功能、認證流程、專案結構 |
 
 ## 專案架構
 
-本專案是 ACM 官網系統的其中一部分，整體系統由四個獨立 repo 組成：
+本專案是 ACM 官網系統的其中一部分，位於 monorepo 的 `cms/` 目錄，整體架構見[根目錄 README](../README.md)：
 
-| Repo | 說明 |
+| 位置 | 說明 |
 |---|---|
-| [acm-website](https://github.com/NCNU-ACM/acm-website) | 官網前台 |
-| [acm-cms-backend](https://github.com/NCNU-ACM/acm-cms-backend) | CMS 後端 API |
-| [acm-cms-frontend](https://github.com/NCNU-ACM/acm-cms-frontend)（本專案） | CMS 後台介面 |
-| [acm-backup](https://github.com/NCNU-ACM/acm-backup) | 內容資料獨立備份 |
+| [website/](../website/) | 官網前台 |
+| [backend/](../backend/) | CMS 後端 API |
+| `cms/`（本專案） | CMS 後台介面 |
+| [acm-backup](https://github.com/NCNU-ACM/acm-backup)（獨立 repo） | 內容資料獨立備份 |
 
-本專案透過 HTTP 呼叫 `acm-cms-backend` 提供的 API，不直接存取檔案系統。
+本專案透過 HTTP 呼叫 [backend/](../backend/) 提供的 API，不直接存取檔案系統。
 
 ```
 幹部登入 → CMS 後台介面（本專案） → CMS 後端 API → 寫入官網 content/
@@ -47,7 +47,7 @@ ACM 官網內容管理系統（CMS）的前端介面，使用 React 與 TypeScri
 
 登入頁面輸入帳密後，向後端 `/api/auth/login` 取得 token，儲存在瀏覽器 `localStorage`。之後每個請求會自動帶上 `Authorization: Bearer {token}` header。
 
-帳密由後端的 `.env` 設定，見 [INSTALL.md](INSTALL.md)。
+帳密由後端的 `.env` 設定，見 [INSTALL.md](../INSTALL.md)。
 
 token 有效期為 24 小時，後端重啟後也會全部失效。為了讓過期的登入盡早被發現，介面會：
 
@@ -69,7 +69,7 @@ token 有效期為 24 小時，後端重啟後也會全部失效。為了讓過�
 
 ### 環境需求
 - Node.js 22 以上
-- 需要 `acm-cms-backend` 在本機 `http://127.0.0.1:8000` 運行中
+- 需要 [backend/](../backend/) 在本機 `http://127.0.0.1:8000` 運行中
 
 ### 安裝與啟動
 
@@ -86,7 +86,7 @@ npm run dev
 npm run build
 ```
 
-建置結果輸出在 `dist/`。正式環境中這個步驟由容器啟動時自動執行，見 [INSTALL.md](INSTALL.md)。
+建置結果輸出在 `dist/`。正式環境中這個步驟由容器啟動時自動執行，見 [INSTALL.md](../INSTALL.md)。
 
 ### 型別檢查
 
@@ -134,6 +134,6 @@ src/
 
 ## 相關專案
 
-- [acm-website](https://github.com/NCNU-ACM/acm-website) — 官網前台
-- [acm-cms-backend](https://github.com/NCNU-ACM/acm-cms-backend) — CMS 後端 API
+- [website/](../website/) — 官網前台
+- [backend/](../backend/) — CMS 後端 API
 - [acm-backup](https://github.com/NCNU-ACM/acm-backup) — 內容資料獨立備份

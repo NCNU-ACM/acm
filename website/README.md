@@ -6,20 +6,20 @@
 
 | 文件 | 內容 |
 |---|---|
-| [INSTALL.md](INSTALL.md) | 伺服器安裝與部署步驟、日常維運、常見問題 |
+| [INSTALL.md](../INSTALL.md) | 伺服器安裝與部署步驟、日常維運、常見問題 |
 | 維護文件 | [React 維護指南（HackMD）](https://hackmd.io/@HcF5PSZWQxW-PSzM1BqJYw/BJxnJPpKze) |
 | 本文件 | 專案架構、資料 schema、頁面結構 |
 
 ## 專案架構
 
-本網站是 ACM 官網系統的其中一個部分，整體系統由四個獨立 repo 組成：
+本網站是 ACM 官網系統的其中一個部分，位於 monorepo 的 `website/` 目錄，整體架構見[根目錄 README](../README.md)：
 
-| Repo | 說明 | 技術 |
+| 位置 | 說明 | 技術 |
 |---|---|---|
-| [acm-website](https://github.com/NCNU-ACM/acm-website)（本專案） | 官網前台 | Astro + React |
-| [acm-cms-backend](https://github.com/NCNU-ACM/acm-cms-backend) | CMS 後端 API | FastAPI |
-| [acm-cms-frontend](https://github.com/NCNU-ACM/acm-cms-frontend) | CMS 後台介面 | React + TypeScript |
-| [acm-backup](https://github.com/NCNU-ACM/acm-backup) | 內容資料獨立備份 | - |
+| `website/`（本專案） | 官網前台 | Astro + React |
+| [backend/](../backend/) | CMS 後端 API | FastAPI |
+| [cms/](../cms/) | CMS 後台介面 | React + TypeScript |
+| [acm-backup](https://github.com/NCNU-ACM/acm-backup)（獨立 repo） | 內容資料獨立備份 | - |
 
 社團幹部透過 CMS 後台新增或編輯內容（活動、小組、幹部、成果展示、全體通知），CMS 後端會把資料寫成 Markdown 檔案存放在本專案的 `content/` 資料夾，並自動同步備份一份到 `acm-backup` repo。官網前台讀取 `content/` 底下的 Markdown 檔案，在 build 時靜態生成所有頁面。
 
@@ -29,7 +29,7 @@ CMS 後台 → CMS 後端 API → 寫入 content/*.md → 觸發官網 rebuild
                       同步備份到 acm-backup
 ```
 
-正式環境四個 repo 以單一 Docker 容器運行，官網、CMS 後台與 API 由同一個服務提供，詳見 [INSTALL.md](INSTALL.md)。
+正式環境整套系統以單一 Docker 容器運行，官網、CMS 後台與 API 由同一個服務提供，詳見 [INSTALL.md](../INSTALL.md)。
 
 ## 資料架構
 
@@ -107,10 +107,10 @@ content/
 
 | 位置 | 檔案 | 說明 |
 |---|---|---|
-| 後端模型 | `acm-cms-backend/models.py` | 模型沒有的欄位會被丟掉，不會寫進 `.md` |
+| 後端模型 | `backend/models.py` | 模型沒有的欄位會被丟掉，不會寫進 `.md` |
 | Content schema | `src/content.config.ts` | 新欄位要加 `.optional()`，否則舊檔案會讓 build 失敗 |
-| CMS 型別 | `acm-cms-frontend/src/types/api.ts` | `Input` 與 `Row` 兩個型別 |
-| CMS 表單 | `acm-cms-frontend/src/components/` 對應的 Manager | 表單型別、預設值、編輯帶入、送出處理與輸入框 |
+| CMS 型別 | `cms/src/types/api.ts` | `Input` 與 `Row` 兩個型別 |
+| CMS 表單 | `cms/src/components/` 對應的 Manager | 表單型別、預設值、編輯帶入、送出處理與輸入框 |
 | 官網元件型別 | `src/types/content.ts` | 例如 `EventItem` |
 | 官網頁面資料 | `src/pages/` 內所有把 collection 整理成元件 props 的 `.map`（見下） | 欄位是手動列出的，不會自動帶過去 |
 | 顯示 | `src/components/` 中要顯示該欄位的元件 | 例如 `EventModal.tsx` |
@@ -187,6 +187,6 @@ npm run build
 
 ## 相關專案
 
-- [acm-cms-backend](https://github.com/NCNU-ACM/acm-cms-backend) — CMS 後端 API
-- [acm-cms-frontend](https://github.com/NCNU-ACM/acm-cms-frontend) — CMS 後台介面
+- [backend/](../backend/) — CMS 後端 API
+- [cms/](../cms/) — CMS 後台介面
 - [acm-backup](https://github.com/NCNU-ACM/acm-backup) — 內容資料獨立備份

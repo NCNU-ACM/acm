@@ -1,6 +1,6 @@
 # NCNU ACM CMS 後端
 
-ACM 官網內容管理系統（CMS）的後端 API，使用 FastAPI 建置，負責讀寫官網內容資料（[acm-website](https://github.com/NCNU-ACM/acm-website) 的 `content/` 資料夾）。
+ACM 官網內容管理系統（CMS）的後端 API，使用 FastAPI 建置，負責讀寫官網內容資料（[`website/content/`](../website/content/) 資料夾）。
 
 正式環境中，本專案同時擔任整個系統的入口：官網與 CMS 後台的靜態檔都由這個服務提供，對外只需要開一個 port。
 
@@ -8,41 +8,42 @@ ACM 官網內容管理系統（CMS）的後端 API，使用 FastAPI 建置，負
 
 | 文件 | 內容 |
 |---|---|
-| [INSTALL.md](INSTALL.md) | 伺服器安裝與部署步驟、日常維運、常見問題 |
+| [INSTALL.md](../INSTALL.md) | 伺服器安裝與部署步驟、日常維運、常見問題 |
 | 本文件 | API 端點、認證機制、資料儲存與備份邏輯 |
 | [React 維護指南（HackMD）](https://hackmd.io/@HcF5PSZWQxW-PSzM1BqJYw/BJxnJPpKze) | 前端 React 教學、專案架構與常見維護任務 |
 
 ## 專案架構
 
-本專案是 ACM 官網系統的其中一部分，整體系統由四個獨立 repo 組成：
+本專案是 ACM 官網系統的其中一部分，位於 monorepo 的 `backend/` 目錄，整體架構見[根目錄 README](../README.md)：
 
-| Repo | 說明 |
+| 位置 | 說明 |
 |---|---|
-| [acm-website](https://github.com/NCNU-ACM/acm-website) | 官網前台 |
-| [acm-cms-backend](https://github.com/NCNU-ACM/acm-cms-backend)（本專案） | CMS 後端 API |
-| [acm-cms-frontend](https://github.com/NCNU-ACM/acm-cms-frontend) | CMS 後台介面 |
-| [acm-backup](https://github.com/NCNU-ACM/acm-backup) | 內容資料獨立備份 |
+| [website/](../website/) | 官網前台 |
+| `backend/`（本專案） | CMS 後端 API |
+| [cms/](../cms/) | CMS 後台介面 |
+| [acm-backup](https://github.com/NCNU-ACM/acm-backup)（獨立 repo） | 內容資料獨立備份 |
 
-本專案預期跟其他三個 repo 放在同一層目錄下，因為會直接讀寫它們的資料夾：
+本專案會直接讀寫同 repo 的其他子目錄，以及與 monorepo 同層的 `acm-backup`：
 
 ```
 ACM/
-├── acm-website/
-│   ├── content/        ← 本專案讀寫的目標
-│   └── dist/           ← 本專案觸發建置並提供的靜態檔
-├── acm-cms-backend/    ← 本專案
-├── acm-cms-frontend/
-│   └── dist/           ← 本專案提供的 CMS 後台靜態檔
+├── acm/                ← monorepo
+│   ├── website/
+│   │   ├── content/    ← 本專案讀寫的目標
+│   │   └── dist/       ← 本專案觸發建置並提供的靜態檔
+│   ├── backend/        ← 本專案
+│   └── cms/
+│       └── dist/       ← 本專案提供的 CMS 後台靜態檔
 └── acm-backup/         ← 本專案會自動同步備份到這裡
 ```
 
-資料夾名稱不可更改，程式使用相對路徑存取。
+子目錄與 `acm-backup` 的資料夾名稱不可更改，程式使用相對路徑存取。`acm-backup` 的位置可用環境變數 `BACKUP_REPO_PATH` 覆寫（見 `.env.example`），Docker 部署時固定為容器內的 `/app/acm-backup`。
 
 ## 功能
 
 提供五個 collection 的 CRUD API：`groups`（小組）、`events`（活動）、`members`（幹部）、`showcase`（成果展示）、`announcements`（全體通知）。每次新增/編輯/刪除資料後，會自動：
 
-1. 把變更寫入對應的 Markdown 檔案（`acm-website/content/`）
+1. 把變更寫入對應的 Markdown 檔案（`website/content/`）
 2. 同步複製一份到獨立備份 repo（`acm-backup`）並 commit + push
 3. 於背景觸發官網重新 build
 
@@ -50,8 +51,8 @@ ACM/
 
 | 路徑 | 內容 |
 |---|---|
-| `/` | 官網靜態檔（`acm-website/dist/`） |
-| `/admin/` | CMS 後台靜態檔（`acm-cms-frontend/dist/`） |
+| `/` | 官網靜態檔（`website/dist/`） |
+| `/admin/` | CMS 後台靜態檔（`cms/dist/`） |
 | `/api/...` | API 端點 |
 | `/api/docs` | FastAPI 自動產生的 Swagger UI |
 
@@ -114,11 +115,11 @@ uvicorn main:app --reload
 
 服務預設啟動在 `http://127.0.0.1:8000`。
 
-本機開發時通常不會有建置好的 `dist/`，此時 `/` 與 `/admin/` 會回 404，只有 `/api/...` 可用，CMS 後台請用 `acm-cms-frontend` 的 `npm run dev` 另外啟動。
+本機開發時通常不會有建置好的 `dist/`，此時 `/` 與 `/admin/` 會回 404，只有 `/api/...` 可用，CMS 後台請在 `cms/` 目錄用 `npm run dev` 另外啟動（見 [cms/README.md](../cms/README.md)）。
 
 ### 部署
 
-正式環境以 Docker 容器運行，完整步驟見 [INSTALL.md](INSTALL.md)。
+正式環境以 Docker 容器運行，完整步驟見 [INSTALL.md](../INSTALL.md)。
 
 ## 資料儲存邏輯
 
@@ -136,15 +137,19 @@ group: system
 
 `generate_timestamp_id()` 產生格式為 `YYYYMMDDHHmmss` 的字串，同時作為檔名與 `created_at` 欄位的值。
 
-新增欄位時要同步修改四個地方：本專案的 `models.py`、`acm-website/src/content.config.ts`、CMS 後台對應的 Manager 元件，以及官網要顯示該欄位的元件。
+新增欄位時要同步修改四個地方：本專案的 `models.py`、`website/src/content.config.ts`、CMS 後台對應的 Manager 元件，以及官網要顯示該欄位的元件。
 
 ## Git 備份機制
 
-`utils/git_backup.py` 的 `commit_change()` 會在每次資料異動後，把 `acm-website/content/` 整個同步複製到 `acm-backup` 並執行 commit + push。
+`utils/git_backup.py` 的 `commit_change()` 會在每次資料異動後，把 `website/content/` 整個同步複製到 `acm-backup` 並執行 commit + push。
+
+同步以 `website/content/` 為準：各 collection 資料夾在 `acm-backup` 裡會先刪除再複製。因此 `website/content/` 是空的時候寫入，會把備份清空，新主機安裝或搬遷時要先還原內容，見 [INSTALL.md](../INSTALL.md)。
+
+備份前會先確認 `BACKUP_REPO_PATH` 底下有 `.git`，沒有的話記錄錯誤並略過備份，不會自動建立資料夾。執行 git 時也設定了 `GIT_CEILING_DIRECTORIES`，git 不會往上層尋找 repo，避免在備份 repo 不存在時誤操作到 monorepo 本身。
 
 推送使用 GitHub fine-grained personal access token，透過 `GITHUB_TOKEN` 環境變數提供，程式會在第一次備份時把 token 寫進 remote URL。未設定 token 時仍會正常寫檔與 commit，僅略過 push。
 
-錯誤訊息不會輸出 git 的完整 stderr，因為 remote URL 含有 token。需要診斷推送問題時請手動執行 git 指令，方式見 [INSTALL.md](INSTALL.md) 的常見問題。
+錯誤訊息不會輸出 git 的完整 stderr，因為 remote URL 含有 token。需要診斷推送問題時請手動執行 git 指令，方式見 [INSTALL.md](../INSTALL.md) 的常見問題。
 
 ## 官網重新建置
 
@@ -161,6 +166,6 @@ group: system
 
 ## 相關專案
 
-- [acm-website](https://github.com/NCNU-ACM/acm-website) — 官網前台
-- [acm-cms-frontend](https://github.com/NCNU-ACM/acm-cms-frontend) — CMS 後台介面
+- [website/](../website/) — 官網前台
+- [cms/](../cms/) — CMS 後台介面
 - [acm-backup](https://github.com/NCNU-ACM/acm-backup) — 內容資料獨立備份
