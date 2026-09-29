@@ -1,0 +1,77 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, "Segoe UI", "Microsoft JhengHei", sans-serif;
+}
+
+.app-layout {
+  display: flex;
+  height: 100vh;
+  background: #0a0e1a;
+}
+
+.sidebar {
+  width: 220px;
+  background: #161b2e;
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar h1 {
+  color: #3b82f6;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  padding: 0 0.5rem;
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.sidebar nav button {
+  text-align: left;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  padding: 0.7rem 0.875rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.sidebar nav button:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.sidebar nav button.active {
+  background: rgba(59, 130, 246, 0.15);
+  color: #3b82f6;
+}
+
+.logout-btn {
+  background: transparent;
+  border: 1px solid #2d3548;
+  color: #94a3b8;
+  padding: 0.6rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  border-color: #f87171;
+  color: #f87171;
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+}
