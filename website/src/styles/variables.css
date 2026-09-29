@@ -1,0 +1,13 @@
+:root {
+  --color-bg: #0a0a0f;
+  --color-surface: #13131a;
+  --color-border: #1e1e2e;
+  --color-accent: #3b82f6;
+  --color-accent-hover: #2563eb;
+  --color-text: #e2e8f0;
+  --color-text-muted: #64748b;
+
+  --font-sans: 'Inter', 'Noto Sans TC', sans-serif;
+
+  --navbar-height: 64px;
+}

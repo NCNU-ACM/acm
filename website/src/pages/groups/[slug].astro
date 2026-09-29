@@ -1,0 +1,112 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Background from '../../components/common/Background.tsx';
+import GroupDetail from '../../components/groups/GroupDetail.tsx';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const groups = await getCollection('groups');
+  return groups.map(group => ({
+    params: { slug: group.data.slug },
+    props: { group },
+  }));
+}
+
+const { group } = Astro.props;
+
+const allMembers = await getCollection('members');
+const memberSemesters = [...new Set(allMembers.map(m => m.id.split('/')[0]))].sort().reverse();
+const latestSemester = memberSemesters[0];
+
+const groupMembers = allMembers
+  .filter(m => m.id.split('/')[0] === latestSemester && m.data.group === group.data.slug)
+  .map(m => ({
+    name: m.data.name,
+    role: m.data.role,
+    avatar: m.data.avatar,
+    bio: m.data.bio,
+    contact: m.data.contact || [],
+  }));
+
+const allShowcaseItems = await getCollection('showcase');
+const showcaseItems = allShowcaseItems.map(s => ({
+  id: s.id,
+  title: s.data.title,
+  group: s.data.group,
+  date: s.data.date.toLocaleDateString('zh-TW'),
+  description: s.data.description,
+  related_event: s.data.related_event,
+  cover_image: s.data.cover_image,
+  gallery: s.data.gallery || [],
+  tags: s.data.tags || [],
+  links: s.data.links || [],
+}));
+
+const allEvents = await getCollection('events');
+const groupEvents = allEvents
+  .filter(e => e.data.group === group.data.slug)
+  .map(e => ({
+    id: e.id,
+    title: e.data.title,
+    date: e.data.event_date.toLocaleDateString('zh-TW'),
+    dateValue: e.data.event_date.valueOf(),
+    type: e.data.type,
+    group: e.data.group,
+    location: e.data.location,
+    description: e.data.description,
+    content: e.data.content,
+    links: e.data.links || [],
+    registration: e.data.registration,
+  }))
+  .sort((a, b) => b.dateValue - a.dateValue);
+
+const allShowcase = await getCollection('showcase');
+const groupShowcase = allShowcase
+  .filter(s => s.data.group === group.data.slug)
+  .map(s => ({
+    id: s.id,
+    title: s.data.title,
+    group: s.data.group,
+    date: s.data.date.toLocaleDateString('zh-TW'),
+    description: s.data.description,
+    cover_image: s.data.cover_image,
+    gallery: s.data.gallery || [],
+    tags: s.data.tags || [],
+    links: s.data.links || [],
+    related_event: s.data.related_event,
+  }));
+---
+
+<BaseLayout title={group.data.name}>
+  <div class="page-container">
+    <Background client:load />
+
+    <div class="relative z-10">
+      <GroupDetail
+        group={{
+          slug: group.data.slug,
+          name: group.data.name,
+          tagline: group.data.tagline,
+          description: group.data.description,
+          color: group.data.color,
+        }}
+        members={groupMembers}
+        events={groupEvents}
+        showcase={groupShowcase}
+        showcaseItems={showcaseItems}
+        client:load
+      />
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-container {
+    position: relative;
+    min-height: 100vh;
+    background: linear-gradient(to top, #030b23 0%, #063238 100%);
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+    overflow: hidden;
+  }
+</style>

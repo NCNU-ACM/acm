@@ -1,0 +1,120 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Background from '../components/common/Background.tsx';
+import EventsList from '../components/events/EventsList.tsx';
+import { getCollection } from 'astro:content';
+
+const allEvents = await getCollection('events');
+
+const events = allEvents
+  .map(e => ({
+    id: e.id,
+    title: e.data.title,
+    date: e.data.event_date.toLocaleDateString('zh-TW'),
+    dateValue: e.data.event_date.valueOf(),
+    group: e.data.group,
+    type: e.data.type,
+    location: e.data.location,
+    description: e.data.description,
+    content: e.data.content,
+    links: e.data.links || [],
+    registration: e.data.registration,
+  }))
+  .sort((a, b) => b.dateValue - a.dateValue);
+
+const allGroups = await getCollection('groups');
+const groups = allGroups.map(g => ({ slug: g.data.slug, name: g.data.name }));
+
+const allShowcase = await getCollection('showcase');
+const showcaseItems = allShowcase.map(s => ({
+  id: s.id,
+  title: s.data.title,
+  group: s.data.group,
+  date: s.data.date.toLocaleDateString('zh-TW'),
+  description: s.data.description,
+  related_event: s.data.related_event,
+  cover_image: s.data.cover_image,
+  gallery: s.data.gallery || [],
+  tags: s.data.tags || [],
+  links: s.data.links || [],
+}));
+
+const allAnnouncements = await getCollection('announcements');
+const activeAnnouncements = allAnnouncements
+  .filter(a => a.data.active)
+  .map(a => ({
+    id: a.id,
+    title: a.data.title,
+    date: new Date(
+      Number(a.data.created_at.slice(0,4)),
+      Number(a.data.created_at.slice(4,6)) - 1,
+      Number(a.data.created_at.slice(6,8))
+    ).toLocaleDateString('zh-TW'),
+    dateValue: new Date(
+      Number(a.data.created_at.slice(0,4)),
+      Number(a.data.created_at.slice(4,6)) - 1,
+      Number(a.data.created_at.slice(6,8))
+    ).valueOf(),
+    type: '通知',
+    group: '',
+    description: a.data.content,
+    content: a.data.content,
+    isAnnouncement: true,
+  }));
+
+const mergedEvents = [...events, ...activeAnnouncements]
+  .sort((a, b) => b.dateValue - a.dateValue);
+---
+
+<BaseLayout title="活動公告">
+  <div class="page-container">
+    <Background client:load />
+
+    <div class="relative z-10">
+      <div class="hero-area">
+        <p class="text-sm tracking-widest mb-2 section-label">EVENTS</p>
+        <h1 class="page-title text-5xl md:text-6xl font-bold">活動公告</h1>
+        <p class="mt-3 text-lg section-subtitle">掌握所有社團活動資訊</p>
+      </div>
+
+      <EventsList events={mergedEvents} groups={groups} showcaseItems={showcaseItems} client:load />
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-container {
+    position: relative;
+    min-height: 100vh;
+    background: linear-gradient(to top, #030b23 0%, #063238 100%);
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+    overflow: hidden;
+  }
+
+  .hero-area {
+    text-align: center;
+    padding: 0 2rem 3rem;
+  }
+
+  .page-title {
+    background: linear-gradient(to top right, #3b82f6 0%, #34d399 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter:
+      drop-shadow(0 0 12px rgba(59, 130, 246, 0.6))
+      drop-shadow(0 0 25px rgba(52, 211, 153, 0.4))
+      drop-shadow(2px 4px 0px rgba(0, 0, 0, 0.6));
+  }
+
+  .section-label {
+    color: rgba(96, 165, 250, 0.8);
+    text-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+  }
+
+  .section-subtitle {
+    color: rgba(226, 232, 240, 0.85);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  }
+</style>

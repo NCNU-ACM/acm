@@ -1,0 +1,259 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Background from '../components/common/Background.tsx';
+import { getCollection } from 'astro:content';
+
+const allGroups = await getCollection('groups');
+const groups = allGroups
+  .map(g => ({
+    name: g.data.name,
+    slug: g.data.slug,
+    tagline: g.data.tagline,
+    color: g.data.color,
+    order: g.data.order,
+  }))
+  .sort((a, b) => a.order - b.order);
+---
+
+<BaseLayout title="加入我們">
+  <div class="page-container">
+    <Background client:load />
+
+    <div class="relative z-10 content-wrapper">
+      <div class="hero-area">
+        <p class="section-label">JOIN US</p>
+        <h1 class="page-title">加入我們</h1>
+        <p class="page-subtitle">不論你是程式新手還是經驗豐富的開發者，這裡都有適合你的位置</p>
+      </div>
+
+      <div class="recruit-section">
+        <div class="recruit-card">
+          <h2 class="recruit-title">目前沒有開放招募</h2>
+          <p class="recruit-desc">招募期間我們會在社群媒體第一時間公告，歡迎追蹤我們的帳號，不錯過任何消息！</p>
+          <div class="social-links">
+            <a href="https://www.instagram.com/acm.ncnu/" target="_blank" class="social-btn ig">
+              Instagram
+            </a>
+            <a href="https://www.facebook.com/groups/3905972989417768/" target="_blank" class="social-btn fb">
+              Facebook
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-container {
+    position: relative;
+    min-height: 100vh;
+    background: linear-gradient(to top, #030b23 0%, #063238 100%);
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+    overflow: hidden;
+  }
+
+  .content-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .hero-area {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .section-label {
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    color: rgba(96, 165, 250, 0.8);
+    text-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+    margin-bottom: 0.75rem;
+  }
+
+  .page-title {
+    font-size: 4rem;
+    font-weight: bold;
+    background: linear-gradient(to top right, #3b82f6 0%, #34d399 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter:
+      drop-shadow(0 0 12px rgba(59, 130, 246, 0.6))
+      drop-shadow(0 0 25px rgba(52, 211, 153, 0.4))
+      drop-shadow(2px 4px 0px rgba(0, 0, 0, 0.6));
+    margin-bottom: 1rem;
+  }
+
+  .page-subtitle {
+    font-size: 1.1rem;
+    color: rgba(226, 232, 240, 0.75);
+    line-height: 1.7;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  .block-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .groups-section {
+    margin-bottom: 4rem;
+  }
+
+  .groups-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+
+  .group-card {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(10, 14, 26, 0.5);
+    backdrop-filter: blur(8px);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .group-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--group-color);
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+  }
+
+  .group-card:hover {
+    border-color: color-mix(in srgb, var(--group-color) 40%, transparent);
+    background: rgba(10, 14, 26, 0.7);
+    box-shadow: 0 0 20px color-mix(in srgb, var(--group-color) 15%, transparent);
+    transform: translateY(-3px);
+  }
+
+  .group-card:hover::before {
+    opacity: 1;
+  }
+
+  .group-color-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-bottom: 0.75rem;
+  }
+
+  .group-name {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+
+  .group-tagline {
+    font-size: 0.9rem;
+    color: rgba(226, 232, 240, 0.65);
+    line-height: 1.6;
+    flex: 1;
+    margin-bottom: 1rem;
+  }
+
+  .group-link {
+    font-size: 0.85rem;
+    color: rgba(96, 165, 250, 0.8);
+    transition: color 0.2s ease;
+  }
+
+  .group-card:hover .group-link {
+    color: rgba(96, 165, 250, 1);
+  }
+
+  .recruit-section {
+    display: flex;
+    justify-content: center;
+  }
+
+  .recruit-card {
+    width: 100%;
+    padding: 3rem 2rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    background: rgba(10, 14, 26, 0.4);
+    backdrop-filter: blur(8px);
+    text-align: center;
+  }
+
+  .recruit-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .recruit-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 1rem;
+  }
+
+  .recruit-desc {
+    font-size: 1rem;
+    color: rgba(226, 232, 240, 0.75);
+    line-height: 1.8;
+    max-width: 480px;
+    margin: 0 auto 2rem;
+  }
+
+  .social-links {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .social-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .social-btn.ig {
+    background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+    color: white;
+    box-shadow: 0 0 20px rgba(253, 29, 29, 0.3);
+  }
+
+  .social-btn.ig:hover {
+    box-shadow: 0 0 30px rgba(253, 29, 29, 0.5);
+    transform: translateY(-2px);
+  }
+
+  .social-btn.fb {
+    background: #1877f2;
+    color: white;
+    box-shadow: 0 0 20px rgba(24, 119, 242, 0.3);
+  }
+
+  .social-btn.fb:hover {
+    box-shadow: 0 0 30px rgba(24, 119, 242, 0.5);
+    transform: translateY(-2px);
+  }
+</style>

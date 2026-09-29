@@ -1,0 +1,165 @@
+.hero-container {
+  height: 100%;
+  background: linear-gradient(to top, #030b23 0%, #063238 100%);
+}
+
+/* [data-reveal] 限定在本元件根 class 內（:where 不加 specificity），.revealed 是 hook 加的字面 class，見 JoinSection.module.css */
+:where(.hero-container) [data-reveal] {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+:where(.hero-container) [data-reveal]:global(.revealed) {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.title-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.hero-title {
+  background: linear-gradient(to top right, #3b82f6 0%, #34d399 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.5);
+  filter: 
+    drop-shadow(0 0 12px rgba(59, 130, 246, 0.6))
+    drop-shadow(0 0 25px rgba(52, 211, 153, 0.4))
+    drop-shadow(3px 6px 0px rgba(0, 0, 0, 1));
+}
+
+.ascii-bg {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-51.7%, 10%);
+  font-family: monospace;
+  font-size: clamp(20px, 3vw, 36px);
+  color: rgba(59, 130, 246, 0.45);
+  white-space: pre;
+  overflow: hidden;
+  pointer-events: none;
+  line-height: 1.2;
+  z-index: 0;
+  filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.5));
+}
+
+.gradient-text {
+  position: relative;
+  display: inline-block;
+  background: linear-gradient(135deg, #a78bfa 0%, #34d399 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding-bottom: 0.5rem;
+}
+
+.gradient-text::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #a78bfa 20%, #34d399 80%, transparent);
+}
+
+.glow-button {
+  background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+  color: white;
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+}
+
+.glow-button:hover {
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.7);
+}
+
+.outline-button {
+  background: transparent;
+  color: white;
+  border: 1px solid rgba(59, 130, 246, 0.6);
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
+}
+
+.outline-button:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+}
+
+.terminal-input-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 9999px;
+  background: rgba(10, 14, 26, 0.3);
+  font-family: monospace;
+  width: 100%;
+  max-width: 400px;
+  backdrop-filter: blur(4px);
+  transition: all 0.3s ease;
+}
+
+.terminal-input-bar:hover {
+  background: rgba(10, 14, 26, 0.9);
+  border-color: rgba(59, 130, 246, 0.6);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+}
+
+.terminal-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: rgba(226, 232, 240, 0.3);
+  font-family: monospace;
+  font-size: 1rem;
+  flex: 1;
+  transition: color 0.3s ease;
+}
+
+.prompt {
+  color: rgba(59, 130, 246, 0.3);
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.cursor {
+  color: rgba(59, 130, 246, 0.3);
+  animation: blink 1s step-end infinite;
+  transition: color 0.3s ease;
+}
+
+.terminal-input.active {
+  color: rgba(226, 232, 240, 1);
+}
+
+.prompt.active {
+  color: rgba(59, 130, 246, 1);
+}
+
+.cursor.active {
+  color: rgba(59, 130, 246, 1);
+}
+
+.placeholder-text {
+  position: absolute;
+  color: rgba(226, 232, 240, 0.3);
+  font-family: monospace;
+  font-size: 1rem;
+  pointer-events: none;
+  transition: color 0.3s ease;
+}
+
+.placeholder-text.active {
+  color: rgba(226, 232, 240, 0.6);
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}

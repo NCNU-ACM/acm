@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Background from '../../components/common/Background.tsx';
+---
+
+<BaseLayout title="社團介紹">
+  <div class="page-container">
+    <Background client:load />
+
+    <div class="relative z-10">
+      <div class="hero-area">
+        <p class="text-sm tracking-widest mb-2 section-label">ABOUT US</p>
+        <h1 class="page-title text-5xl md:text-6xl font-bold">社團介紹</h1>
+      </div>
+
+      <div class="content-area">
+        <p class="intro-text">
+          NCNU ACM 是國立暨南國際大學的程式設計與技術社團，致力於打造一個讓同學們透過實作學習、交流成長的環境。我們相信寫程式不只是知識的累積，更是創意實踐與團隊合作的過程。
+        </p>
+        <p class="intro-text">
+          社團目前下設四個小組，各自有不同的學習方向與專案實作機會，讓不同興趣的同學都能找到適合自己的位置。想了解各小組的詳細內容，可以前往小組簡介頁面查看。
+        </p>
+        <p class="intro-text">
+          我們定期舉辦讀書會、講座與競賽活動，從新生程式營到進階技術分享，希望能陪伴每一位成員從入門到精通，一起在程式設計的路上走得更遠。
+        </p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-container {
+    position: relative;
+    min-height: 100vh;
+    background: linear-gradient(to top, #030b23 0%, #063238 100%);
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+    overflow: hidden;
+  }
+
+  .hero-area {
+    text-align: center;
+    padding: 0 2rem 3rem;
+  }
+
+  .page-title {
+    background: linear-gradient(to top right, #3b82f6 0%, #34d399 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter:
+      drop-shadow(0 0 12px rgba(59, 130, 246, 0.6))
+      drop-shadow(0 0 25px rgba(52, 211, 153, 0.4))
+      drop-shadow(2px 4px 0px rgba(0, 0, 0, 0.6));
+  }
+
+  .section-label {
+    color: rgba(96, 165, 250, 0.8);
+    text-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+  }
+
+  .content-area {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .intro-text {
+    color: rgba(226, 232, 240, 0.85);
+    font-size: 1.125rem;
+    line-height: 1.9;
+    margin-bottom: 1.75rem;
+  }
+</style>

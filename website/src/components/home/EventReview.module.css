@@ -1,0 +1,146 @@
+.review-container {
+  height: 100%;
+  background: linear-gradient(to top, #030b23 0%, #063238 100%);
+}
+
+/* [data-reveal] 限定在本元件根 class 內（:where 不加 specificity），.revealed 是 hook 加的字面 class，見 JoinSection.module.css */
+:where(.review-container) [data-reveal] {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+:where(.review-container) [data-reveal]:global(.revealed) {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.section-title {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.75rem;
+  background: linear-gradient(to top right, #3b82f6 0%, #34d399 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter:
+    drop-shadow(0 0 12px rgba(59, 130, 246, 0.6))
+    drop-shadow(0 0 25px rgba(52, 211, 153, 0.4))
+    drop-shadow(2px 4px 0px rgba(0, 0, 0, 0.6));
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #3b82f6, #06b6d4, transparent);
+  filter: drop-shadow(0 0 6px #3b82f6);
+}
+
+.section-label {
+  color: rgba(96, 165, 250, 0.8);
+  text-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+}
+
+.section-subtitle {
+  color: rgba(226, 232, 240, 0.85);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.timeline-wrapper {
+  position: relative;
+  overflow-x: auto;
+  padding: 4rem 1rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(59, 130, 246, 0.4) rgba(255, 255, 255, 0.05);
+}
+
+.timeline-wrapper::-webkit-scrollbar { height: 6px; }
+.timeline-wrapper::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 3px; }
+.timeline-wrapper::-webkit-scrollbar-thumb { background: rgba(59, 130, 246, 0.4); border-radius: 3px; }
+.timeline-wrapper::-webkit-scrollbar-thumb:hover { background: rgba(59, 130, 246, 0.6); }
+
+.timeline-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.4), rgba(59, 130, 246, 0.4), transparent);
+}
+
+.timeline-track {
+  display: flex;
+  gap: 4rem;
+  position: relative;
+  min-width: max-content;
+  padding: 0 2rem;
+}
+
+.timeline-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 180px;
+  flex-shrink: 0;
+  cursor: pointer;
+  color: inherit;
+  height: 200px;
+}
+
+.timeline-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #3b82f6;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.7);
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.timeline-item:hover .timeline-dot {
+  transform: translate(-50%, -50%) scale(1.4);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.9);
+}
+
+.timeline-card {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-radius: 0.5rem;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: rgba(10, 14, 26, 0.01);
+  backdrop-filter: blur(8px);
+  padding: 1rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.item-top .timeline-card {
+  bottom: calc(50% + 20px);
+}
+
+.item-bottom .timeline-card {
+  top: calc(50% + 20px);
+}
+
+.timeline-item:hover .timeline-card {
+  border-color: rgba(59, 130, 246, 0.4);
+  background: rgba(10, 14, 26, 0.3);
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.15);
+}
+
+.timeline-date {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.25rem;
+}

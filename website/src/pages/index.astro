@@ -1,0 +1,184 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroSection from '../components/home/HeroSection.tsx';
+import GroupsSection from '../components/home/GroupsSection.tsx';
+import UpcomingEvents from '../components/home/UpcomingEvents.tsx';
+import EventReview from '../components/home/EventReview.tsx';
+import JoinSection from '../components/home/JoinSection.tsx';
+import { getCollection } from 'astro:content';
+
+const allGroups = await getCollection('groups');
+const groups = allGroups
+  .map(g => ({
+    name: g.data.name,
+    slug: g.data.slug,
+    order: g.data.order,
+    tagline: g.data.tagline,
+    description: g.data.description,
+    color: g.data.color,
+  }))
+  .sort((a, b) => a.order - b.order);
+
+const allEvents = await getCollection('events');
+const today = new Date();
+
+const upcoming = allEvents
+  .map(e => ({
+    id: e.id,
+    title: e.data.title,
+    date: e.data.event_date.toLocaleDateString('zh-TW'),
+    dateValue: e.data.event_date.valueOf(),
+    type: e.data.type,
+    group: e.data.group,
+    location: e.data.location,
+    description: e.data.description,
+    content: e.data.content,
+    links: e.data.links || [],
+    registration: e.data.registration,
+  }))
+  .filter(e => e.dateValue >= today.valueOf())
+  .sort((a, b) => a.dateValue - b.dateValue)
+  .slice(0, 3);
+
+const past = allEvents
+  .map(e => ({
+    id: e.id,
+    title: e.data.title,
+    date: e.data.event_date.toLocaleDateString('zh-TW'),
+    dateValue: e.data.event_date.valueOf(),
+    type: e.data.type,
+    group: e.data.group,
+    location: e.data.location,
+    description: e.data.description,
+    content: e.data.content,
+    links: e.data.links || [],
+    registration: e.data.registration,
+  }))
+  .filter(e => e.dateValue < today.valueOf())
+  .sort((a, b) => b.dateValue - a.dateValue)
+  .slice(0, 6);
+
+const allShowcase = await getCollection('showcase');
+const showcaseItems = allShowcase.map(s => ({
+  id: s.id,
+  title: s.data.title,
+  group: s.data.group,
+  date: s.data.date.toLocaleDateString('zh-TW'),
+  description: s.data.description,
+  related_event: s.data.related_event,
+  cover_image: s.data.cover_image,
+  gallery: s.data.gallery || [],
+  tags: s.data.tags || [],
+  links: s.data.links || [],
+}));
+---
+
+<BaseLayout>
+  <div id="fullpage">
+    <div class="section"><HeroSection client:load /></div>
+    <div class="section"><GroupsSection groups={groups} client:load /></div>
+    <div class="section">
+      <UpcomingEvents events={upcoming} groups={groups} showcaseItems={showcaseItems} client:load />
+    </div>
+    <div class="section">
+      <EventReview events={past} groups={groups} showcaseItems={showcaseItems} client:load />
+    </div>
+    <div class="section"><JoinSection client:load /></div>
+  </div>
+</BaseLayout>
+
+<script>
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+  window.scrollTo(0, 0);
+
+  const sections = document.querySelectorAll('.section');
+  let currentIndex = 0;
+  let isScrolling = false;
+
+  const getSectionTop = (index: number) => {
+    return (sections[index] as HTMLElement).getBoundingClientRect().top + window.scrollY;
+  };
+
+  const goToSection = (index: number) => {
+    if (index < 0 || index >= sections.length) return;
+    currentIndex = index;
+
+    if (index === 0) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: getSectionTop(index), behavior: 'smooth' });
+    }
+
+    document.querySelectorAll('.nav-dot').forEach((dot, i) => {
+      const d = dot as HTMLElement;
+      if (i === currentIndex) {
+        d.style.background = 'rgba(59,130,246,0.9)';
+        d.style.transform = 'scale(1.3)';
+      } else {
+        d.style.background = 'rgba(255,255,255,0.3)';
+        d.style.transform = 'scale(1)';
+      }
+    });
+  };
+
+  let wheelTimeout: ReturnType<typeof setTimeout>;
+  window.addEventListener('wheel', (e) => {
+    const target = e.target as HTMLElement;
+    if (target.closest('.modal')) {
+      return;
+    }
+
+    e.preventDefault();
+    if (isScrolling) return;
+    
+    isScrolling = true;
+    if (e.deltaY > 0) {
+      goToSection(currentIndex + 1);
+    } else {
+      goToSection(currentIndex - 1);
+    }
+    
+    setTimeout(() => { isScrolling = false; }, 800);
+  }, { passive: false });
+
+  window.addEventListener('keydown', (e) => {
+    if (isScrolling) return;
+    if (e.key === 'ArrowDown') goToSection(currentIndex + 1);
+    if (e.key === 'ArrowUp') goToSection(currentIndex - 1);
+  });
+
+  const nav = document.createElement('div');
+  nav.style.cssText = 'position:fixed;right:1.5rem;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;gap:0.75rem;';
+  
+  sections.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'nav-dot';
+    dot.style.cssText = `width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.3);cursor:pointer;transition:all 0.3s;`;
+    if (i === 0) {
+      dot.style.background = 'rgba(59,130,246,0.9)';
+      dot.style.transform = 'scale(1.3)';
+    }
+    dot.addEventListener('click', () => goToSection(i));
+    nav.appendChild(dot);
+  });
+  document.body.appendChild(nav);
+</script>
+
+<style>
+  .section {
+    height: 100vh;
+    overflow: hidden;
+  }
+  .nav-dot.active {
+    background: rgba(59, 130, 246, 0.9) !important;
+    transform: scale(1.3) !important;
+  }
+  html {
+    scrollbar-width: none;
+  }
+  html::-webkit-scrollbar {
+    display: none;
+  }
+</style>

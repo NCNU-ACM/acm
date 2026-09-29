@@ -1,0 +1,139 @@
+.events-container {
+  height: 100%;
+  background: linear-gradient(to top, #030b23 0%, #063238 100%);
+}
+
+/* [data-reveal] 限定在本元件根 class 內（:where 不加 specificity），.revealed 是 hook 加的字面 class，見 JoinSection.module.css */
+:where(.events-container) [data-reveal] {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+:where(.events-container) [data-reveal]:global(.revealed) {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.section-title {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.75rem;
+  background: linear-gradient(to top right, #3b82f6 0%, #34d399 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter:
+    drop-shadow(0 0 12px rgba(59, 130, 246, 0.6))
+    drop-shadow(0 0 25px rgba(52, 211, 153, 0.4))
+    drop-shadow(2px 4px 0px rgba(0, 0, 0, 0.6));
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #3b82f6, #06b6d4, transparent);
+  filter: drop-shadow(0 0 6px #3b82f6);
+}
+
+.section-label {
+  color: rgba(96, 165, 250, 0.8);
+  text-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+}
+
+.section-subtitle {
+  color: rgba(226, 232, 240, 0.85);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.carousel-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  overflow: visible;
+}
+
+.carousel-track {
+  display: flex;
+  gap: 1.5rem;
+  overflow: visible;
+  flex: 1;
+  scroll-behavior: smooth;
+  /* events 最多 3 筆（index.astro 的 slice(0, 3)），剛好排滿一列，所以固定置中 */
+  justify-content: center;
+}
+
+.event-card {
+  flex: 0 0 calc(33.333% - 1rem);
+  min-height: 240px;
+  border-radius: 0.75rem;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: rgba(10, 14, 26, 0.01);
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease, opacity 0.6s ease, transform 0.6s ease;
+  overflow: hidden;
+  display: block;
+  color: inherit;
+  cursor: pointer;
+}
+
+.event-card:hover {
+  border-color: rgba(59, 130, 246, 0.4);
+  background: rgba(10, 14, 26, 0.3);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.15);
+  transform: translateY(-4px);
+}
+
+.event-card-inner {
+  padding: 1.5rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.tag {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.tag-group {
+  background: rgba(6, 182, 212, 0.15);
+  color: #22d3ee;
+  border-color: rgba(6, 182, 212, 0.3);
+}
+
+.event-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.empty-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 100%;
+  min-height: 120px;
+}
+
+.card-border-bottom {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.5), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.event-card:hover .card-border-bottom {
+  opacity: 1;
+}
