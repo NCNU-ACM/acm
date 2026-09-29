@@ -113,7 +113,7 @@ content/
 | CMS 表單 | `cms/src/components/` 對應的 Manager | 表單型別、預設值、編輯帶入、送出處理與輸入框 |
 | 官網元件型別 | `src/types/content.ts` | 例如 `EventItem` |
 | 官網頁面資料 | `src/pages/` 內所有把 collection 整理成元件 props 的 `.map`（見下） | 欄位是手動列出的，不會自動帶過去 |
-| 顯示 | `src/components/` 中要顯示該欄位的元件 | 例如 `EventModal.tsx` |
+| 顯示 | `src/components/content/` 中要顯示該欄位的元件 | 例如 `content/common/EventModal.tsx` |
 
 活動資料在 `.astro` 頁面裡共有四處 `.map` 需要補上新欄位：
 
@@ -135,7 +135,16 @@ content/
 | `/groups/[slug]` | 小組詳情頁（介紹、幹部、公告、成果展示） |
 | `/join` | 加入我們 |
 
-頁面由 `src/pages/` 底下的檔案路徑決定，共用外框在 `src/layouts/BaseLayout.astro`，React 互動元件放在 `src/components/`。維護文件見 [HackMD](https://hackmd.io/@HcF5PSZWQxW-PSzM1BqJYw/BJxnJPpKze)。
+頁面由 `src/pages/` 底下的檔案路徑決定，共用外框在 `src/layouts/BaseLayout.astro`，React 互動元件放在 `src/components/`，依是否需要修改分成兩層：
+
+| 目錄 | 內容 | 修改頻率 |
+|---|---|---|
+| `src/components/content/` | 各頁面的元件（Navbar、活動列表、modal、首頁各 section 等），依頁面分子資料夾 | 平常維護主要改這裡 |
+| `src/components/internal/` | 自製機制（轉場、modal portal、背景動畫） | 幾乎不需要修改，改之前先讀 [internal/README.md](src/components/internal/README.md) |
+
+hooks 也比照分成 `src/hooks/content/` 與 `src/hooks/internal/`。部分 content 元件含有機制相關的段落，檔案開頭有註解標明哪些地方不要隨意更動。
+
+維護文件見 [HackMD](https://hackmd.io/@HcF5PSZWQxW-PSzM1BqJYw/BJxnJPpKze)。
 
 ## SEO 設定
 

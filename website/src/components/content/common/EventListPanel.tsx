@@ -1,5 +1,10 @@
+// 【內容元件，含機制】列表的文字、欄位、版面與樣式可以放心修改。下列部分屬於機制，不要隨意更動：
+// - 跑馬燈：wrapperRefs / textRefs 量出文字超出的寬度，滑鼠移入時依超出量計算捲動距離與時間。
+// - 這兩組 ref callback 要寫成有大括號的函式（不能回傳值），因為 React 19 會把回傳值當成 cleanup。
+// - maxHeight 以 CSS 變數 --max-height 傳給 .module.css，見 React 維護指南 §6.1。
+
 import { useRef, useState, type CSSProperties } from 'react';
-import type { EventItem, GroupRef, ShowcaseItem } from '../../types/content';
+import type { EventItem, GroupRef, ShowcaseItem } from '../../../types/content';
 import EventModal from './EventModal';
 import styles from './EventListPanel.module.css';
 

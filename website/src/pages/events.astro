@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Background from '../components/common/Background.tsx';
-import EventsList from '../components/events/EventsList.tsx';
+import Background from '../components/internal/Background.tsx';
+import EventsList from '../components/content/events/EventsList.tsx';
 import { getCollection } from 'astro:content';
 
 const allEvents = await getCollection('events');

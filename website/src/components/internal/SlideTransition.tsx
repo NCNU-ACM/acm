@@ -1,3 +1,19 @@
+// 【內部機制】小組頁成果展示輪播的換頁轉場，由 GroupDetail 使用。
+// 修改前先讀 React 維護指南 §6.4 與同目錄的 README.md。
+//
+// 這是什麼：以 key 換掉子元素時，讓舊元素播完離場動畫、新元素播進場動畫，class 序列仿照 Vue 的 <Transition>。
+//
+// 為什麼不能簡化：
+// - React 沒有內建離場轉場，元素換 key 後會立刻卸載。要播離場動畫，就得自己把舊元素留在畫面上直到 transition 結束，
+//   這就是下面 leaving 清單與 Slot 的用途，也是新舊元素要放在同一個 keyed 陣列的原因（DOM 節點才不會重建）。
+// - class 直接操作 DOM、隔兩個 frame 才從 from 切到 to、離場前強制 reflow：少任何一步，瀏覽器會把起始態與終態
+//   併成同一次繪製，動畫直接跳到終點。
+// - 等 transitionend 收齊並用 timeout 保險、gen 計數、進場到一半就離場時的取消、離場結束用 flushSync 卸載，
+//   各自處理一種邊界情況：事件沒觸發、快速連點回到同一個 key、動畫中途切換、舊 slide 在卸載前閃回版面。
+//
+// 改了會壞掉什麼：小組頁成果輪播的滑動動畫（方向錯亂、閃爍、新舊 slide 疊在一起或殘留在畫面上）。
+// GroupDetail.module.css 裡 slide-left-* / slide-right-* 的 class 名稱與這裡的序列一一對應，兩邊要一起改。
+
 import {
   cloneElement,
   useCallback,

@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Background from '../../components/common/Background.tsx';
-import MembersCarousel from '../../components/about/MembersCarousel.tsx';
+import Background from '../../components/internal/Background.tsx';
+import MembersCarousel from '../../components/content/about/MembersCarousel.tsx';
 import { getCollection } from 'astro:content';
 
 const allMembers = await getCollection('members');

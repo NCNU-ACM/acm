@@ -1,5 +1,7 @@
-import Background from '../common/Background';
-import { useScrollReveal } from '../../hooks/useScrollReveal';
+// 帶 data-reveal 的元素由 useScrollReveal 控制淡入，className 必須是固定字串，見 hooks/internal/useScrollReveal.ts 與 React 維護指南 §6.2。
+
+import Background from '../../internal/Background';
+import { useScrollReveal } from '../../../hooks/internal/useScrollReveal';
 import styles from './JoinSection.module.css';
 
 export default function JoinSection() {

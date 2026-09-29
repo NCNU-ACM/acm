@@ -1,5 +1,5 @@
 import { useState, type CSSProperties } from 'react';
-import type { GroupRef, Member } from '../../types/content';
+import type { GroupRef, Member } from '../../../types/content';
 import styles from './MembersCarousel.module.css';
 
 interface Props {

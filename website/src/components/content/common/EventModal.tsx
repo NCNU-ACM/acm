@@ -1,7 +1,16 @@
+// 【內容元件，含機制】文字、欄位、版面與樣式可以放心修改。下列部分屬於機制，不要隨意更動，
+// 改之前先讀 React 維護指南 §6.5：
+// - EventModal 裡的兩個 effect（body 捲動鎖）：開啟時鎖住背景捲動，關閉或卸載時解除。
+// - EventModal 回傳 <EventModalContent key={event.id}>：靠 key 讓每次開啟都重置為「活動公告」分頁。
+// - 字面 class `modal`（className={`modal ${styles.modal}`}）：首頁 index.astro 的整頁捲動靠 closest('.modal')
+//   放行 modal 內的滾輪。拿掉的話，首頁開啟的 modal 內容無法捲動。
+// - 外層的 <ModalPortal>：讓 modal 蓋過固定的 Navbar，見 components/internal/ModalPortal.tsx。
+// - useEscapeKey(onClose)：按 ESC 關閉。
+
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { useEscapeKey } from '../../hooks/useEscapeKey';
-import type { EventItem, GroupRef, ShowcaseItem } from '../../types/content';
-import ModalPortal from './ModalPortal';
+import { useEscapeKey } from '../../../hooks/content/useEscapeKey';
+import type { EventItem, GroupRef, ShowcaseItem } from '../../../types/content';
+import ModalPortal from '../../internal/ModalPortal';
 import styles from './EventModal.module.css';
 
 interface Props {

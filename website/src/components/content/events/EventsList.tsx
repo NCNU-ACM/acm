@@ -1,4 +1,4 @@
-import type { EventItem, GroupRef, ShowcaseItem } from '../../types/content';
+import type { EventItem, GroupRef, ShowcaseItem } from '../../../types/content';
 import EventListPanel from '../common/EventListPanel';
 import styles from './EventsList.module.css';
 

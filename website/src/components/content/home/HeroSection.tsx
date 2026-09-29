@@ -1,8 +1,16 @@
+// 【內容元件，含機制】標語、按鈕、連結與樣式可以放心修改。下列部分屬於機制，不要隨意更動：
+// - 模組層級的 figlet.parseFont：SSR 時也會執行，這裡只能註冊字型，不可以碰 window 或 document。
+// - asciiArt 初始為空字串、掛載後才產生：避免伺服器與瀏覽器的輸出不一致（hydration 錯誤）。
+// - 輸入框維持非受控（defaultValue）並搭配 composing ref：輸入法組字期間不更新。
+//   改成受控 input，注音或拼音組字時會畫出組字中間的字母。
+// - 帶 data-reveal 的元素由 useScrollReveal 控制淡入，className 必須是固定字串，
+//   見 hooks/internal/useScrollReveal.ts 與 React 維護指南 §6.2。
+
 import { useEffect, useRef, useState } from 'react';
 import figlet from 'figlet';
 import standard from 'figlet/importable-fonts/Standard.js';
-import Background from '../common/Background';
-import { useScrollReveal } from '../../hooks/useScrollReveal';
+import Background from '../../internal/Background';
+import { useScrollReveal } from '../../../hooks/internal/useScrollReveal';
 import styles from './HeroSection.module.css';
 
 // 模組層級：SSR 也會執行，但只註冊字型，不碰 window

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { GroupRef } from '../../types/content';
+import type { GroupRef } from '../../../types/content';
 
 interface Props {
   groups: GroupRef[];

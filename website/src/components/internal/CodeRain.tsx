@@ -1,3 +1,16 @@
+// 【內部機制】背景的 0/1 數字雨動畫，由 Background 使用，全站每個有背景的區塊各跑一份。
+// 修改前先讀同目錄的 README.md。
+//
+// 這是純裝飾：效能有問題時，可以把 Background 裡的 <CodeRain /> 整個拿掉，不影響任何功能，只是視覺變單調。
+//
+// 為什麼不能簡化：
+// - 畫布依 devicePixelRatio 放大後再 scale 回來。拿掉的話，高解析度螢幕（多數手機與筆電）上的字會模糊。
+// - 每滴雨各自一個 setInterval，速度才會各不相同。改成共用一個計時器，所有雨滴會同步落下。
+// - 卸載時清掉 requestAnimationFrame、所有 interval 與 resize 監聽，少清任何一個都會在元件卸載後繼續執行。
+//
+// 改了會壞掉什麼：主要是效能。首頁五個 section 各有一個 Background，同時有五個畫布在跑，
+// 任何增加每一幀工作量的修改（更多雨滴、更複雜的繪製）都會乘上這個倍數，低階裝置上會先看到捲動與動畫卡頓。
+
 import { useEffect, useRef } from 'react';
 import styles from './CodeRain.module.css';
 

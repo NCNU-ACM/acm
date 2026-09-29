@@ -1,8 +1,10 @@
+// 帶 data-reveal 的元素由 useScrollReveal 控制淡入，className 必須是固定字串，見 hooks/internal/useScrollReveal.ts 與 React 維護指南 §6.2。
+
 import { useState } from 'react';
-import type { EventItem, GroupRef, ShowcaseItem } from '../../types/content';
-import Background from '../common/Background';
+import type { EventItem, GroupRef, ShowcaseItem } from '../../../types/content';
+import Background from '../../internal/Background';
 import EventModal from '../common/EventModal';
-import { useScrollReveal } from '../../hooks/useScrollReveal';
+import { useScrollReveal } from '../../../hooks/internal/useScrollReveal';
 import styles from './UpcomingEvents.module.css';
 
 interface Props {
