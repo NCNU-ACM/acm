@@ -1,3 +1,5 @@
+name: acm
+
 services:
   acm:
     build:
@@ -7,18 +9,22 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+    environment:
+      # 固定為容器內路徑。env_file 裡若有本機開發用的主機路徑，這裡會覆蓋掉。
+      BACKUP_REPO_PATH: /app/acm-backup
     ports:
       - "8000:8000"
     volumes:
-      - ./:/app/acm-cms-backend
-      - ../acm-website:/app/acm-website
-      - ../acm-cms-frontend:/app/acm-cms-frontend
-      - ../acm-backup:/app/acm-backup
+      # 容器內的 /app 對應主機上的 ACM/ 目錄，讓程式的相對路徑在兩邊一致
+      - ./:/app/acm/backend
+      - ../website:/app/acm/website
+      - ../cms:/app/acm/cms
+      - ../../acm-backup:/app/acm-backup
       # 用具名 volume 遮蔽掉 host 的 node_modules。
       # 開發機是 Windows，host 上的套件含 Windows 原生檔案，
       # 直接被容器內的 Linux Node 讀到會壞掉。
-      - website_node_modules:/app/acm-website/node_modules
-      - cms_node_modules:/app/acm-cms-frontend/node_modules
+      - website_node_modules:/app/acm/website/node_modules
+      - cms_node_modules:/app/acm/cms/node_modules
 
 volumes:
   website_node_modules:

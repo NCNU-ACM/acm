@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app/acm-cms-backend
+WORKDIR /app/acm/backend
 
 # 建立 Python 虛擬環境，避免與系統 Python 套件衝突（Debian 12 起會擋 pip 直接裝）
 ENV VIRTUAL_ENV=/opt/venv
