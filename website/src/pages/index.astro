@@ -95,8 +95,8 @@ const showcaseItems = allShowcase.map(s => ({
   // - wheel 監聽必須是 { passive: false } 並呼叫 preventDefault，才能擋掉瀏覽器原生的捲動。
   //   改成 passive 或拿掉 preventDefault，一次滾輪會同時觸發原生捲動與換頁，畫面停在兩個 section 中間。
   // - isScrolling 加上 800ms 冷卻：觸控板一次滑動會送出幾十個 wheel 事件，沒有冷卻會一次跳過好幾頁。
-  // - target.closest('.modal') 讓活動 modal 裡可以正常捲動。EventModal 為此保留了字面 class `modal`，兩邊要一起改；
-  //   ShowcaseModal 沒有這個 class，所以不能直接搬到首頁使用。
+  // - target.closest('.modal') 讓活動 modal 裡可以正常捲動；modal 開著時方向鍵也只捲 modal、不換頁。
+  //   EventModal 為此保留了字面 class `modal`，兩邊要一起改；ShowcaseModal 沒有這個 class，所以不能直接搬到首頁使用。
   // - scrollRestoration 設為 manual 並捲回頂端：currentIndex 從 0 開始算，若瀏覽器把位置還原到中間，
   //   索引與畫面會對不上，下一次滾輪會跳到錯的 section。
   // - 方向鍵換頁聽的是 window 的 keydown。useEscapeKey 刻意不 stopPropagation，就是為了不擋到這裡。
@@ -160,15 +160,25 @@ const showcaseItems = allShowcase.map(s => ({
   }, { passive: false });
 
   window.addEventListener('keydown', (e) => {
+    if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+
+    // modal 開著時 ↑↓ 只捲 modal 內容、不換頁，與滾輪的 closest('.modal') 一致，靠的是同一個字面 class `modal`。
+    // keydown 的 target 是有焦點的元素，modal 裡沒有可聚焦的元素，target 一律是 body，
+    // 所以不能用 e.target.closest('.modal')，改成檢查頁面上有沒有 .modal。
+    // 焦點不在 modal 內時，瀏覽器原生的方向鍵不會捲它（剛點卡片開啟時就是這樣），所以這裡自己捲，
+    // 並擋掉原生行為，避免點過 modal 內部後原生捲動與這裡重複。步距 40px 與原生方向鍵相同。
+    const modal = document.querySelector('.modal');
+    if (modal) {
+      e.preventDefault();
+      modal.scrollBy({ top: e.key === 'ArrowDown' ? 40 : -40, behavior: 'smooth' });
+      return;
+    }
+
     // 擋掉方向鍵原生的 40px 捲動：它會打斷 goToSection 的平滑捲動，畫面停在半途而 currentIndex 已經加 1，
     // 下一次滾輪就會跳過一頁。要放在 isScrolling 檢查之前，冷卻期間按方向鍵也會打斷滾輪觸發的捲動。
-    // modal 開著時（body 已鎖捲動）與焦點在輸入框時不擋，維持原本的行為：前者讓方向鍵能捲 modal 內容，後者讓游標能移動。
+    // 焦點在輸入框時不擋，讓游標能照常移動。
     const target = e.target;
-    if (
-      (e.key === 'ArrowDown' || e.key === 'ArrowUp') &&
-      !document.querySelector('.modal') &&
-      !(target instanceof Element && target.closest('input, textarea, select, [contenteditable]'))
-    ) {
+    if (!(target instanceof Element && target.closest('input, textarea, select, [contenteditable]'))) {
       e.preventDefault();
     }
 
