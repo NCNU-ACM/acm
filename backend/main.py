@@ -9,8 +9,8 @@ from auth import login, verify_token
 from routers import groups, events, members, showcase, announcements
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-WEBSITE_DIST = os.path.normpath(os.path.join(BASE_DIR, "..", "acm-website", "dist"))
-CMS_DIST = os.path.normpath(os.path.join(BASE_DIR, "..", "acm-cms-frontend", "dist"))
+WEBSITE_DIST = os.path.normpath(os.path.join(BASE_DIR, "..", "website", "dist"))
+CMS_DIST = os.path.normpath(os.path.join(BASE_DIR, "..", "cms", "dist"))
 
 app = FastAPI(title="NCNU ACM CMS API", docs_url="/api/docs", openapi_url="/api/openapi.json")
 

@@ -3,7 +3,7 @@ import subprocess
 import threading
 
 WEBSITE_PATH = os.path.normpath(
-    os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "acm-website")
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "website")
 )
 DIST_PATH = os.path.join(WEBSITE_PATH, "dist")
 

@@ -5,7 +5,7 @@ from datetime import datetime
 from typing import Optional
 
 
-CONTENT_ROOT = os.path.join(os.path.dirname(__file__), "..", "..", "acm-website", "content")
+CONTENT_ROOT = os.path.join(os.path.dirname(__file__), "..", "..", "website", "content")
 
 
 def get_collection_path(collection: str, semester: Optional[str] = None) -> str:

@@ -3,8 +3,16 @@ import shutil
 import subprocess
 
 BASE = os.path.dirname(os.path.abspath(__file__))
-CONTENT_ROOT = os.path.normpath(os.path.join(BASE, "..", "..", "acm-website", "content"))
-BACKUP_REPO_PATH = os.path.normpath(os.path.join(BASE, "..", "..", "acm-backup"))
+CONTENT_ROOT = os.path.normpath(os.path.join(BASE, "..", "..", "website", "content"))
+# 預設為 monorepo 的同層目錄（ACM/acm-backup），可用環境變數覆寫
+BACKUP_REPO_PATH = os.path.abspath(
+    os.getenv("BACKUP_REPO_PATH") or os.path.join(BASE, "..", "..", "..", "acm-backup")
+)
+
+# 限制 git 只認 BACKUP_REPO_PATH 本身，不往上層找 repo。
+# 否則備份目錄不是 repo 時，git 會找到 monorepo 並在裡面 commit、改 remote、push。
+_GIT_ENV = {k: v for k, v in os.environ.items() if k not in ("GIT_DIR", "GIT_WORK_TREE")}
+_GIT_ENV["GIT_CEILING_DIRECTORIES"] = os.path.dirname(BACKUP_REPO_PATH)
 
 BACKUP_REPO_URL = os.getenv("BACKUP_REPO_URL", "github.com/NCNU-ACM/acm-backup.git")
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN", "")
@@ -19,6 +27,7 @@ def _git(args, check=False):
     return subprocess.run(
         ["git"] + args,
         cwd=BACKUP_REPO_PATH,
+        env=_GIT_ENV,
         capture_output=True,
         text=True,
         encoding="utf-8",
@@ -57,8 +66,6 @@ def sync_to_backup():
         print(f"[backup] 找不到 content 資料夾: {CONTENT_ROOT}", flush=True)
         return
 
-    os.makedirs(BACKUP_REPO_PATH, exist_ok=True)
-
     for item in os.listdir(CONTENT_ROOT):
         src = os.path.join(CONTENT_ROOT, item)
         dst = os.path.join(BACKUP_REPO_PATH, item)
@@ -71,6 +78,10 @@ def sync_to_backup():
             shutil.copy2(src, dst)
 
 def commit_change(message: str) -> bool:
+    if not os.path.exists(os.path.join(BACKUP_REPO_PATH, ".git")):
+        print(f"[backup] 錯誤: {BACKUP_REPO_PATH} 底下沒有 .git，不是備份 repo，略過備份", flush=True)
+        return False
+
     try:
         _ensure_config()
         sync_to_backup()
