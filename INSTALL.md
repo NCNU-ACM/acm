@@ -261,7 +261,8 @@ docker compose logs --tail 100  # 查看最近 100 行
 ```bash
 docker compose stop     # 停止
 docker compose start    # 啟動
-docker compose restart  # 重啟（修改 .env 或網站原始碼後使用）
+docker compose restart  # 重啟（修改網站原始碼後使用）
+docker compose up -d    # 重新建立容器（修改 .env 後使用）
 ```
 
 ### 更新程式碼
@@ -316,11 +317,13 @@ docker compose up -d
 
 ### 修改帳密或更新 Token
 
-修改 `.env` 後必須重啟容器才會生效，環境變數只在啟動時讀取：
+修改 `.env` 後必須重新建立容器才會生效：
 
 ```bash
-docker compose restart
+docker compose up -d
 ```
+
+`docker compose restart` 不會重新讀取 `.env`：環境變數是在建立容器時寫入的，`restart` 只會重新啟動同一個容器，改過的帳密或 token 不會生效。
 
 ### 從備份還原內容
 
@@ -475,7 +478,7 @@ cd acm/backend && docker compose up -d
 
 **日誌出現 `[backup] push 失敗（return code 128）`**
 
-Token 權限不足或設定錯誤。回到第三步檢查：Resource owner 是否為 NCNU-ACM、是否已加入 Contents 的 Read and write 權限。重新產生 token 並更新 `.env` 後執行 `docker compose restart`。
+Token 權限不足或設定錯誤。回到第三步檢查：Resource owner 是否為 NCNU-ACM、是否已加入 Contents 的 Read and write 權限。重新產生 token 並更新 `.env` 後執行 `docker compose up -d`。
 
 可用以下指令查看實際錯誤訊息：
 
@@ -517,7 +520,7 @@ docker compose up -d --build
 
 **修改 `.env` 後設定沒有生效**
 
-環境變數只在容器啟動時讀取，必須執行 `docker compose restart`。
+環境變數是在建立容器時寫入的，`docker compose restart` 不會重新讀取 `.env`，必須執行 `docker compose up -d`。
 
 **修改網站原始碼後畫面沒有變化**
 
