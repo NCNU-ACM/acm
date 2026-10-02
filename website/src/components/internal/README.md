@@ -24,7 +24,7 @@
 
 - `SlideTransition` 的 class 序列 ↔ `content/groups/GroupDetail.module.css` 的 `slide-left-*` / `slide-right-*`
 - `useScrollReveal` 加上的字面 class `revealed` ↔ 首頁五個 section 的 `.module.css` 裡的 `:global(.revealed)`
-- `index.astro` 的 `closest('.modal')` ↔ `content/common/EventModal.tsx` 的字面 class `modal`
+- `index.astro` 的 `closest('.modal')`（滾輪）與 `document.querySelector('.modal')`（方向鍵）↔ `content/common/EventModal.tsx` 的字面 class `modal`
 - `useEscapeKey` 不攔截事件 ↔ `index.astro` 用方向鍵換頁
 
 ## 效能

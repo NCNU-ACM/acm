@@ -2,8 +2,9 @@
 // 改之前先讀內部機制詳解 §5：
 // - EventModal 裡的兩個 effect（body 捲動鎖）：開啟時鎖住背景捲動，關閉或卸載時解除。
 // - EventModal 回傳 <EventModalContent key={event.id}>：靠 key 讓每次開啟都重置為「活動公告」分頁。
-// - 字面 class `modal`（className={`modal ${styles.modal}`}）：首頁 index.astro 的整頁捲動靠 closest('.modal')
-//   放行 modal 內的滾輪。拿掉的話，首頁開啟的 modal 內容無法捲動。
+// - 字面 class `modal`（className={`modal ${styles.modal}`}）：首頁 index.astro 的整頁捲動靠它判斷 modal。
+//   滾輪用 target.closest('.modal') 放行 modal 內的滾動；方向鍵用 document.querySelector('.modal') 判斷 modal 是否開著，
+//   開著時 ↑↓ 只捲 modal、不換頁。拿掉的話，首頁開啟的 modal 內容無法用滾輪或方向鍵捲動，背後的頁面反而會換區塊。
 // - 外層的 <ModalPortal>：讓 modal 蓋過固定的 Navbar，見 components/internal/ModalPortal.tsx。
 // - useEscapeKey(onClose)：按 ESC 關閉。
 
@@ -81,7 +82,7 @@ function EventModalContent({
           if (e.target === e.currentTarget) onClose();
         }}
       >
-        {/* index.astro 的 wheel 攔截靠 closest('.modal')，所以要保留字面 class */}
+        {/* index.astro 的整頁捲動靠字面 class 判斷 modal：滾輪用 closest('.modal')、方向鍵用 querySelector('.modal')，所以要保留 */}
         <div className={`modal ${styles.modal}`}>
           <button className={styles['modal-close']} onClick={onClose}>
             ×
