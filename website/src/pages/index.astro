@@ -95,8 +95,9 @@ const showcaseItems = allShowcase.map(s => ({
   // - wheel 監聽必須是 { passive: false } 並呼叫 preventDefault，才能擋掉瀏覽器原生的捲動。
   //   改成 passive 或拿掉 preventDefault，一次滾輪會同時觸發原生捲動與換頁，畫面停在兩個 section 中間。
   // - isScrolling 加上 800ms 冷卻：觸控板一次滑動會送出幾十個 wheel 事件，沒有冷卻會一次跳過好幾頁。
-  // - target.closest('.modal') 讓活動 modal 裡可以正常捲動；modal 開著時方向鍵也只捲 modal、不換頁。
-  //   EventModal 為此保留了字面 class `modal`，兩邊要一起改；ShowcaseModal 沒有這個 class，所以不能直接搬到首頁使用。
+  // - 滾輪用 target.closest('.modal') 讓活動 modal 裡可以正常捲動；方向鍵用 document.querySelector('.modal') 判斷 modal 是否開著，
+  //   開著時只捲 modal、不換頁（keydown 的 target 一律是 body，不能用 closest，見該段註解）。
+  //   兩者都靠 EventModal 保留的字面 class `modal`，兩邊要一起改；ShowcaseModal 沒有這個 class，所以不能直接搬到首頁使用。
   // - scrollRestoration 設為 manual 並捲回頂端：currentIndex 從 0 開始算，若瀏覽器把位置還原到中間，
   //   索引與畫面會對不上，下一次滾輪會跳到錯的 section。
   // - 方向鍵換頁聽的是 window 的 keydown。useEscapeKey 刻意不 stopPropagation，就是為了不擋到這裡。

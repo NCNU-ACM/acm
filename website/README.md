@@ -7,7 +7,7 @@
 | 文件 | 內容 |
 |---|---|
 | [INSTALL.md](../INSTALL.md) | 伺服器安裝與部署步驟、日常維運、常見問題 |
-| 維護文件 | [React 維護指南（HackMD）](https://hackmd.io/@HcF5PSZWQxW-PSzM1BqJYw/BJxnJPpKze) |
+| [內部機制詳解（HackMD）](https://hackmd.io/@HcF5PSZWQxW-PSzM1BqJYw/BJxnJPpKze) | 內部機制：轉場、彈窗、淡入、整頁捲動 |
 | 本文件 | 專案架構、資料 schema、頁面結構 |
 
 ## 專案架構
@@ -122,7 +122,7 @@ content/
 - `src/pages/events.astro`：`events`
 - `src/pages/groups/[slug].astro`：`groupEvents`
 
-其他 collection 也有各自的 `.map`（例如成果展示在 `index.astro`、`events.astro`、`groups/[slug].astro`，幹部在 `about/members.astro`、`groups/[slug].astro`），改欄位前先在 `src/pages/` 搜尋該欄位所屬 collection 的既有欄位名稱，確認每一處都補上。詳細步驟與範例見維護文件。
+其他 collection 也有各自的 `.map`（例如成果展示在 `index.astro`、`events.astro`、`groups/[slug].astro`，幹部在 `about/members.astro`、`groups/[slug].astro`），改欄位前先在 `src/pages/` 搜尋該欄位所屬 collection 的既有欄位名稱，確認每一處都補上。完整的修改位置以上方的表格為準，逐項確認。
 
 ## 頁面結構
 
@@ -144,7 +144,7 @@ content/
 
 hooks 也比照分成 `src/hooks/content/` 與 `src/hooks/internal/`。部分 content 元件含有機制相關的段落，檔案開頭有註解標明哪些地方不要隨意更動。
 
-維護文件見 [HackMD](https://hackmd.io/@HcF5PSZWQxW-PSzM1BqJYw/BJxnJPpKze)。
+內部機制（轉場、彈窗、淡入、整頁捲動）的詳細說明見 [內部機制詳解（HackMD）](https://hackmd.io/@HcF5PSZWQxW-PSzM1BqJYw/BJxnJPpKze)。
 
 ## SEO 設定
 

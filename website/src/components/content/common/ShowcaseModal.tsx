@@ -1,12 +1,12 @@
 // 【內容元件，含機制】文字、欄位、版面與樣式可以放心修改。下列部分屬於機制，不要隨意更動，
-// 改之前先讀 React 維護指南 §6.5：
+// 改之前先讀內部機制詳解 §5：
 // - ShowcaseModal 回傳 key={showcase.id} 的內容元件：每次開啟都重置分頁與 lightbox。
 // - useEscapeKey 的 ESC 分層：lightbox 開著時先關 lightbox，再按一次才關 modal。
 // - lightbox 按鈕上的 e.stopPropagation()：避免點按鈕時也觸發外層「點背景關閉」。
 // - 外層的 <ModalPortal>：讓 modal 蓋過固定的 Navbar，見 components/internal/ModalPortal.tsx。
 //
 // 注意：本元件沒有 body 捲動鎖，也沒有字面 class `modal`（EventModal 兩者都有）。目前只用在小組頁所以沒問題；
-// 若要在首頁使用，必須比照 EventModal 補上，否則 index.astro 的整頁捲動會攔截 modal 內的滾輪。
+// 若要在首頁使用，必須比照 EventModal 補上，否則 index.astro 的整頁捲動會攔截 modal 內的滾輪與 ↑↓ 方向鍵，背後的頁面會換區塊。
 
 import { useState } from 'react';
 import { useEscapeKey } from '../../../hooks/content/useEscapeKey';

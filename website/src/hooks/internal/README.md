@@ -4,4 +4,4 @@
 
 | 檔案 | 修改前先讀 |
 |---|---|
-| `useScrollReveal.ts` | [React 維護指南（HackMD）](https://hackmd.io/@HcF5PSZWQxW-PSzM1BqJYw/BJxnJPpKze) §6.2 |
+| `useScrollReveal.ts` | [內部機制詳解（HackMD）](https://hackmd.io/@HcF5PSZWQxW-PSzM1BqJYw/BJxnJPpKze) §2 |
