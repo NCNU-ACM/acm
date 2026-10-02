@@ -11,7 +11,7 @@
 | [website/README.md](website/README.md) | 官網架構、資料 schema、頁面結構 |
 | [cms/README.md](cms/README.md) | CMS 後台功能、認證流程、專案結構 |
 | [backend/README.md](backend/README.md) | API 端點、認證機制、資料儲存與備份邏輯 |
-| [React 維護指南（HackMD）](https://hackmd.io/@HcF5PSZWQxW-PSzM1BqJYw/BJxnJPpKze) | 前端 React 教學、專案架構與常見維護任務 |
+| [內部機制詳解（HackMD）](https://hackmd.io/@HcF5PSZWQxW-PSzM1BqJYw/BJxnJPpKze) | 內部機制：轉場、彈窗、淡入、整頁捲動，以及 CMS 的登入驗證與表單慣例。只有要修改這些地方時才需要讀 |
 
 ## 系統組成
 

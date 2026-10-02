@@ -7,7 +7,7 @@ ACM 官網內容管理系統（CMS）的前端介面，使用 React 與 TypeScri
 | 文件 | 內容 |
 |---|---|
 | [INSTALL.md](../INSTALL.md) | 伺服器安裝與部署步驟、日常維運、常見問題 |
-| 維護文件 | [React 維護指南（HackMD）](https://hackmd.io/@HcF5PSZWQxW-PSzM1BqJYw/BJxnJPpKze) |
+| [內部機制詳解（HackMD）](https://hackmd.io/@HcF5PSZWQxW-PSzM1BqJYw/BJxnJPpKze) | 內部機制：轉場、彈窗、淡入、整頁捲動；本專案相關的是 §9 登入驗證流程與 §12 表單慣例 |
 | 本文件 | 功能、認證流程、專案結構 |
 
 ## 專案架構
@@ -125,7 +125,7 @@ src/
 
 元件樣式使用 CSS Modules，樣式只作用在該元件內；`App.css` 與 `assets/main.css` 是全域樣式。
 
-維護文件見 [HackMD](https://hackmd.io/@HcF5PSZWQxW-PSzM1BqJYw/BJxnJPpKze)。
+登入驗證流程與表單寫法的設計原因，見 [內部機制詳解（HackMD）](https://hackmd.io/@HcF5PSZWQxW-PSzM1BqJYw/BJxnJPpKze) §9、§12。
 
 ## 技術棧
 
