@@ -8,15 +8,15 @@
 
 | 檔案 | 用途 | 使用者 | 修改前先讀 |
 |---|---|---|---|
-| `SlideTransition.tsx` | 以 key 換掉子元素時的進出場轉場（仿 Vue `<Transition>`） | 小組頁成果輪播（GroupDetail） | 維護指南 §6.4 |
-| `ModalPortal.tsx` | 把 modal 掛到 `<body>`，讓它蓋過固定的 Navbar | EventModal、ShowcaseModal | 維護指南 §6.5 |
+| `SlideTransition.tsx` | 以 key 換掉子元素時的進出場轉場（仿 Vue `<Transition>`） | 小組頁成果輪播（GroupDetail） | 內部機制詳解 §4 |
+| `ModalPortal.tsx` | 把 modal 掛到 `<body>`，讓它蓋過固定的 Navbar | EventModal、ShowcaseModal | 內部機制詳解 §5 |
 | `CodeRain.tsx` | 背景的 0/1 數字雨動畫，純裝飾 | Background | 檔案開頭註解 |
 | `Background.tsx` | 電路圖 SVG 與數字雨組成的背景 | 首頁各 section 與其他頁面 | 檔案開頭註解 |
-| [`../../hooks/internal/useScrollReveal.ts`](../../hooks/internal/useScrollReveal.ts) | 首頁各 section 元素進入畫面時淡入 | 首頁五個 section | 維護指南 §6.2 |
+| [`../../hooks/internal/useScrollReveal.ts`](../../hooks/internal/useScrollReveal.ts) | 首頁各 section 元素進入畫面時淡入 | 首頁五個 section | 內部機制詳解 §2 |
 
-另外，首頁的整頁捲動（滾輪一次換一個 section）寫在 [`../../pages/index.astro`](../../pages/index.astro) 的 `<script>` 裡，也屬於這類機制，說明在該段開頭的註解。
+另外，首頁的整頁捲動（滾輪一次換一個 section）寫在 [`../../pages/index.astro`](../../pages/index.astro) 的 `<script>` 裡，也屬於這類機制，說明在該段開頭的註解，內部機制詳解 §6 也有整理。
 
-各元件的 `.module.css` 寫法規則（`:where()`、`:global()`、CSS 變數）見維護指南 §6.1。
+各元件的 `.module.css` 寫法規則（`:where()`、`:global()`、CSS 變數）見內部機制詳解 §1。
 
 ## 常見的連動關係
 
@@ -33,6 +33,6 @@
 
 ## 參考文件
 
-- [React 維護指南（HackMD）](https://hackmd.io/@HcF5PSZWQxW-PSzM1BqJYw/BJxnJPpKze) §6：§6.1 CSS Modules 規則、§6.2 useScrollReveal、§6.4 SlideTransition、§6.5 ModalPortal 與 modal
+- [內部機制詳解（HackMD）](https://hackmd.io/@HcF5PSZWQxW-PSzM1BqJYw/BJxnJPpKze)：§1 CSS Modules 規則、§2 useScrollReveal、§4 SlideTransition、§5 ModalPortal 與 modal、§6 首頁整頁捲動與彈窗
 - [根目錄 README.md](../../../../README.md)：整體系統架構
 - [INSTALL.md](../../../../INSTALL.md)：部署與建置流程（修改後如何在正式環境重新建置）

@@ -1,4 +1,4 @@
-// 帶 data-reveal 的元素由 useScrollReveal 控制淡入，className 必須是固定字串，見 hooks/internal/useScrollReveal.ts 與 React 維護指南 §6.2。
+// 帶 data-reveal 的元素由 useScrollReveal 控制淡入，className 必須是固定字串，見 hooks/internal/useScrollReveal.ts 與內部機制詳解 §2。
 
 import type { CSSProperties } from 'react';
 import { Server, Globe, Gamepad2, Briefcase, type LucideIcon } from 'lucide-react';

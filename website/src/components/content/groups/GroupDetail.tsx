@@ -1,11 +1,11 @@
 // 【內容元件，含機制】小組介紹、幹部、活動區塊的文字、版面與樣式可以放心修改。下列部分屬於機制，不要隨意更動：
 // - <SlideTransition> 的直接子元素，className 必須是固定字串：SlideTransition 會直接改它的 classList，
 //   動態的 className 會被 React 覆寫。GroupDetail.module.css 裡 slide-left-* / slide-right-* 的 class
-//   由 SlideTransition 使用，名稱不可改。見 React 維護指南 §6.4。
+//   由 SlideTransition 使用，名稱不可改。見內部機制詳解 §4。
 // - 輪播計時器：carouselTimer、isModalOpen、showcaseIndexRef 放在 ref 而不是 state，因為計時器與滑鼠事件
 //   需要讀到最新值；開啟成果 modal 時暫停輪播、關閉後恢復。
 // - slideDirection 決定轉場往左或往右，在每次換頁前設定。
-// - 成果 modal（ShowcaseModal）的行為見 React 維護指南 §6.5。
+// - 成果 modal（ShowcaseModal）的行為見內部機制詳解 §5。
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { EventItem, Group, GroupMember, ShowcaseCard, ShowcaseItem } from '../../../types/content';

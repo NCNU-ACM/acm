@@ -2,8 +2,8 @@
 // - 時間軸項目上的 data-reveal-follow：項目在橫向捲動容器裡，要跟著外層的 timeline-wrapper 一起淡入。
 //   拿掉的話，一開始在捲動範圍外的項目捲過去時會一直是透明的。
 // - 帶 data-reveal 的元素 className 必須是固定字串。EventReview.module.css 裡的 :where(.review-container) [data-reveal]
-//   與 :global(.revealed) 是配合 useScrollReveal 寫的。見 hooks/internal/useScrollReveal.ts 與 React 維護指南 §6.2。
-// - 點擊項目開啟的 EventModal 見 React 維護指南 §6.5。
+//   與 :global(.revealed) 是配合 useScrollReveal 寫的。見 hooks/internal/useScrollReveal.ts 與內部機制詳解 §2。
+// - 點擊項目開啟的 EventModal 見內部機制詳解 §5。
 
 import { useMemo, useState } from 'react';
 import type { EventItem, GroupRef, ShowcaseItem } from '../../../types/content';

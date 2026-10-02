@@ -1,5 +1,5 @@
 // 【內部機制】首頁各 section 的元素進入畫面時淡入，由 HeroSection、GroupsSection、UpcomingEvents、
-// EventReview、JoinSection 使用。修改前先讀 React 維護指南 §6.2 與 components/internal/README.md。
+// EventReview、JoinSection 使用。修改前先讀內部機制詳解 §2 與 components/internal/README.md。
 //
 // 這是什麼：元件把回傳的 containerRef 掛在根元素上，裡面帶 data-reveal 的元素進入視窗時加上 revealed class。
 // 淡入的樣式（起始透明、位移）寫在各 section 自己的 .module.css 裡。

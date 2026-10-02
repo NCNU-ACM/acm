@@ -1,5 +1,5 @@
 // 【內容元件，含機制】文字、欄位、版面與樣式可以放心修改。下列部分屬於機制，不要隨意更動，
-// 改之前先讀 React 維護指南 §6.5：
+// 改之前先讀內部機制詳解 §5：
 // - ShowcaseModal 回傳 key={showcase.id} 的內容元件：每次開啟都重置分頁與 lightbox。
 // - useEscapeKey 的 ESC 分層：lightbox 開著時先關 lightbox，再按一次才關 modal。
 // - lightbox 按鈕上的 e.stopPropagation()：避免點按鈕時也觸發外層「點背景關閉」。

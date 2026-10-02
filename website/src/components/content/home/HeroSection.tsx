@@ -4,7 +4,7 @@
 // - 輸入框維持非受控（defaultValue）並搭配 composing ref：輸入法組字期間不更新。
 //   改成受控 input，注音或拼音組字時會畫出組字中間的字母。
 // - 帶 data-reveal 的元素由 useScrollReveal 控制淡入，className 必須是固定字串，
-//   見 hooks/internal/useScrollReveal.ts 與 React 維護指南 §6.2。
+//   見 hooks/internal/useScrollReveal.ts 與內部機制詳解 §2。
 
 import { useEffect, useRef, useState } from 'react';
 import figlet from 'figlet';
